@@ -35,10 +35,8 @@ const LoginView: React.FC = () => {
         const data = await response.json();
         const { token, userId } = data;
 
-        // Zapisz token w localStorage
         localStorage.setItem("authToken", token);
 
-        // Ustaw ID użytkownika w stanie komponentu
         setUserId(userId);
 
         window.location.href = "/";
