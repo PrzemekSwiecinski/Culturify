@@ -154,13 +154,13 @@ function UsersTickets() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          id_biletu: selectedTicket.id_biletu, // Przesyłamy tylko id_biletu
+          id_biletu: selectedTicket.id_biletu,
         }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data); // Opcjonalnie obsłuż dane odpowiedzi
+        console.log(data);
       } else {
         console.error("Failed to exhibit ticket");
       }
