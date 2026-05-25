@@ -20,9 +20,9 @@ import Avatar from "@mui/material/Avatar";
 
 interface Ticket {
   id_biletu: string;
-  id_wydarzenia: string; // Upewnij się, że to pole odpowiada id_wydarzenia z bazy danych
+  id_wydarzenia: string;
   id_uzytkownika: string;
-  nazwa: string; // Zaktualizuj odpowiednio nazwę
+  nazwa: string;
   data: string;
   godzina: string;
   cena: number;
