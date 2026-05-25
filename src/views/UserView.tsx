@@ -87,7 +87,6 @@ function UserView() {
       });
 
       if (response.ok) {
-        // Zakładając, że doladuj.php zwraca zaktualizowane dane użytkownika
         const updatedUserData = await response.json();
         setUserData(updatedUserData);
       } else {
