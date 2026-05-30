@@ -10,7 +10,6 @@ $db = 'culturify';
 $user = 'root';
 $pass = '';
 
-// Połączenie z bazą danych
 $dsn = "mysql:host=$host;dbname=$db;charset=utf8";
 $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -25,7 +24,6 @@ try {
     exit;
 }
 
-// Odczyt danych z żądania
 $input = json_decode(file_get_contents('php://input'), true);
 
 if (!isset($input['authToken'])) {
@@ -34,8 +32,6 @@ if (!isset($input['authToken'])) {
 }
 
 $authToken = $input['authToken'];
-
-// Pobranie biletów z wartością id_uzytkownika=NULL
 try {
     $stmt = $pdo->prepare("SELECT b.id_biletu, w.typ, w.nazwa, w.data, w.godzina, w.cena
                            FROM bilety b
