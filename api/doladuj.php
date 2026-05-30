@@ -26,7 +26,6 @@ $data = json_decode(file_get_contents('php://input'), true);
 $authToken = isset($data['authToken']) ? $data['authToken'] : null;
 
 if ($authToken !== null) {
-    // Sprawdź, czy użytkownik istnieje
     $sql = "SELECT portfel FROM uzytkownicy WHERE token_sesji = '$authToken'";
     $result = $conn->query($sql);
 
@@ -34,11 +33,9 @@ if ($authToken !== null) {
         $user = $result->fetch_assoc();
         $nowyPortfel = $user['portfel'] + 100;
 
-        // Zaktualizuj saldo portfela
         $updateSql = "UPDATE uzytkownicy SET portfel = $nowyPortfel WHERE token_sesji = '$authToken'";
 
         if ($conn->query($updateSql) === TRUE) {
-            // Pobierz zaktualizowane dane użytkownika
             $userSql = "SELECT imie, nazwisko, email, telefon, pesel, portfel FROM uzytkownicy WHERE token_sesji = '$authToken'";
             $userResult = $conn->query($userSql);
 
