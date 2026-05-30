@@ -31,10 +31,8 @@ if ($username !== null && $password !== null) {
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
-        // Znaleziono użytkownika - generuj token sesji
         $token = bin2hex(random_bytes(32));
 
-        // Aktualizuj rekord w bazie danych z nowym tokenem sesji
         $updateTokenSql = "UPDATE uzytkownicy SET token_sesji = '$token' WHERE login = '$username'";
         $conn->query($updateTokenSql);
 
