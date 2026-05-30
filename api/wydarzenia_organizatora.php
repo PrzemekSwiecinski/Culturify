@@ -26,7 +26,6 @@ $data = json_decode(file_get_contents('php://input'), true);
 $authToken = isset($data['authToken']) ? $data['authToken'] : null;
 
 if ($authToken !== null) {
-    // Pobranie id_lekarza na podstawie tokenu autoryzacyjnego lekarza
     $sqlOrganizerId = "SELECT id_organizatora FROM organizatorzy WHERE token_sesji = '$authToken'";
     $resultOrganizerId = $conn->query($sqlOrganizerId);
 
@@ -34,19 +33,14 @@ if ($authToken !== null) {
         $organizerData = $resultOrganizerId->fetch_assoc();
         $organizerId = $organizerData['id_organizatora'];
 
-        // Pobranie wizyt lekarza na podstawie id_lekarza
         $sqlEvents = "SELECT id_wydarzenia, typ, nazwa, data, godzina, miasto, adres, opis
                       FROM wydarzenia
                       WHERE id_organizatora = '$organizerId'";
-
-//        $sqlVisits = "SELECT w.*, u.imie AS imie_uzytkownika, u.nazwisko AS nazwisko_uzytkownika
- //                                     FROM wizyty w
-   //                                   INNER JOIN uzytkownicy u ON w.id_uzytkownika = u.id_uzytkownika
-      //                                WHERE w.id_lekarza = '$doctorId'";
+    
 
         $resultEvents = $conn->query($sqlEvents);
 
-        $eventsData = array(); // Inicjalizacja tablicy na dane wizyt
+        $eventsData = array();
 
         if ($resultEvents->num_rows > 0) {
             while ($row = $resultEvents->fetch_assoc()) {
@@ -62,7 +56,6 @@ if ($authToken !== null) {
                 );
                 $eventsData[] = $events;
             }
-            // Zwrócenie danych w formacie JSON
             echo json_encode($eventsData);
         } else {
             http_response_code(404);
