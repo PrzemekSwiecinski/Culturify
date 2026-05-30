@@ -10,7 +10,6 @@ $db = 'culturify';
 $user = 'root';
 $pass = '';
 
-// Połączenie z bazą danych
 $dsn = "mysql:host=$host;dbname=$db;charset=utf8";
 $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -25,10 +24,8 @@ try {
     exit;
 }
 
-// Odczyt danych z żądania
 $input = json_decode(file_get_contents('php://input'), true);
 
-// Sprawdzenie poprawności JSON
 if (json_last_error() !== JSON_ERROR_NONE) {
     echo json_encode([
         "error" => "Invalid JSON data",
@@ -50,7 +47,6 @@ $eventId = $input['eventId'];
 $authToken = $input['authToken'];
 $ticketCount = $input['ticketCount'];
 
-// Sprawdzenie poprawności tokenu sesji
 $stmt = $pdo->prepare("SELECT id_uzytkownika FROM uzytkownicy WHERE token_sesji = :token_sesji");
 $stmt->execute(['token_sesji' => $authToken]);
 $user = $stmt->fetch();
@@ -62,7 +58,6 @@ if (!$user) {
 
 $userId = $user['id_uzytkownika'];
 
-// Sprawdzenie czy wydarzenie istnieje
 $stmt = $pdo->prepare("SELECT cena FROM wydarzenia WHERE id_wydarzenia = :id_wydarzenia");
 $stmt->execute(['id_wydarzenia' => $eventId]);
 $event = $stmt->fetch();
@@ -74,7 +69,6 @@ if (!$event) {
 
 $cena = $event['cena'];
 
-// Dodanie biletów do tabeli bilety
 try {
     $pdo->beginTransaction();
 
@@ -83,7 +77,6 @@ try {
         $stmt->execute(['id_wydarzenia' => $eventId, 'id_uzytkownika' => $userId]);
     }
 
-    // Zmniejszenie wartości portfela użytkownika o wartość cena z tabeli wydarzenia
     $stmt = $pdo->prepare("UPDATE uzytkownicy SET portfel = portfel - :cena WHERE id_uzytkownika = :id_uzytkownika");
     $stmt->execute(['cena' => $cena * $ticketCount, 'id_uzytkownika' => $userId]);
 
