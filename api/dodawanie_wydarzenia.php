@@ -24,7 +24,6 @@ if ($conn->connect_error) {
 
 $data = json_decode(file_get_contents('php://input'), true);
 
-// Ustalamy id organizatora na 1
 $organizerId = 1;
 
 $type = $data['type'];
@@ -37,7 +36,6 @@ $description = $data['description'];
 $photo = $data['photo'];
 $price = $data['price'];
 
-// Wstawienie danych do bazy danych z użyciem parametryzowanego zapytania
 $stmt = $conn->prepare("INSERT INTO wydarzenia (id_organizatora, typ, nazwa, data, godzina, miasto, adres, opis, zdjecie, cena) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 $stmt->bind_param("isssssssss", $organizerId, $type, $name, $date, $time, $city, $address, $description, $photo, $price);
 
