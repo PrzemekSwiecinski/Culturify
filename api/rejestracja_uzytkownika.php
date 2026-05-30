@@ -32,10 +32,8 @@ $email = isset($data['email']) ? $data['email'] : null;
 
 if ($login !== null && $password !== null && $passwordRepeat !== null && $firstName !== null && $lastName !== null) {
     if ($password === $passwordRepeat) {
-        // Generowanie unikalnego tokena sesji
         $token = bin2hex(random_bytes(32));
 
-        // Wstawienie rekordu z tokenem sesji do bazy danych
         $sql = "INSERT INTO uzytkownicy (login, haslo, imie, nazwisko, email, token_sesji) VALUES ('$login', '$password', '$firstName', '$lastName', '$email', '$token')";
         
         if ($conn->query($sql) === TRUE) {
