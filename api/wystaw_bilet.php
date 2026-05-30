@@ -10,7 +10,6 @@ $db = 'culturify';
 $user = 'root';
 $pass = '';
 
-// Połączenie z bazą danych
 $dsn = "mysql:host=$host;dbname=$db;charset=utf8";
 $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -25,7 +24,6 @@ try {
     exit;
 }
 
-// Odczyt danych z żądania
 $input = json_decode(file_get_contents('php://input'), true);
 
 if (!isset($input['id_biletu'])) {
@@ -38,7 +36,6 @@ $idBiletu = $input['id_biletu'];
 try {
     $pdo->beginTransaction();
 
-    // Sprawdzenie biletu i pobranie id_uzytkownika oraz id_wydarzenia
     $stmt = $pdo->prepare("SELECT id_uzytkownika, id_wydarzenia FROM bilety WHERE id_biletu = :id_biletu");
     $stmt->execute(['id_biletu' => $idBiletu]);
     $bilet = $stmt->fetch();
@@ -51,11 +48,9 @@ try {
     $userId = $bilet['id_uzytkownika'];
     $eventId = $bilet['id_wydarzenia'];
 
-    // Zmiana wartości kolumny id_uzytkownika w tabeli bilety na NULL
     $stmt = $pdo->prepare("UPDATE bilety SET id_uzytkownika = NULL WHERE id_biletu = :id_biletu");
     $stmt->execute(['id_biletu' => $idBiletu]);
 
-    // Pobranie wartości ceny z tabeli wydarzenia
     $stmt = $pdo->prepare("SELECT cena FROM wydarzenia WHERE id_wydarzenia = :id_wydarzenia");
     $stmt->execute(['id_wydarzenia' => $eventId]);
     $event = $stmt->fetch();
@@ -67,7 +62,6 @@ try {
 
     $cena = $event['cena'];
 
-    // Dodanie wartości ceny do portfela użytkownika
     $stmt = $pdo->prepare("UPDATE uzytkownicy SET portfel = portfel + :cena WHERE id_uzytkownika = :id_uzytkownika");
     $stmt->execute(['cena' => $cena, 'id_uzytkownika' => $userId]);
 
